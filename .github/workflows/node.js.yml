@@ -1,4 +1,4 @@
-name: Deploy to VPS1
+name: Deploy to VPS
 
 on:
   push:
@@ -22,23 +22,22 @@ jobs:
         password: ${{ secrets.VPS_PASSWORD }}
         script: |
           echo "Checking if the project directory exists..."
-          if [ -d "/home/${{ secrets.VPS_USERNAME }}/xinchao" ]; then
+          if [ -d "/root/xinchao" ]; then
             echo "Directory exists. Pulling latest changes..."
-            cd /home/${{ secrets.VPS_USERNAME }}/xinchao
+            cd /root/xinchao
             if [ -d ".git" ]; then
               git pull origin main
             else
               echo "Not a git repository. Cloning again..."
-              rm -rf /home/${{ secrets.VPS_USERNAME }}/xinchao
-              git clone https://github.com/selcoool/test_ci_cd /home/${{ secrets.VPS_USERNAME }}/xinchao
+              rm -rf /root/xinchao
+              git clone https://github.com/selcoool/test_ci_cd /root/xinchao
             fi
           else
             echo "Directory does not exist. Creating and cloning..."
-            mkdir -p /home/${{ secrets.VPS_USERNAME }}/xinchao
-            git clone https://github.com/selcoool/test_ci_cd /home/${{ secrets.VPS_USERNAME }}/xinchao
+            mkdir -p /root/xinchao
+            git clone https://github.com/selcoool/test_ci_cd /root/xinchao
           fi
           echo "Directory and repository setup complete."
-
 
 
 
