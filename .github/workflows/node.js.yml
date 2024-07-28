@@ -6,6 +6,8 @@ on:
   pull_request:
     branches: [ "main" ]
 
+
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -14,30 +16,51 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: SSH to VPS and update project
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.VPS_IP }}
-        username: ${{ secrets.VPS_USERNAME }}
-        password: ${{ secrets.VPS_PASSWORD }}
-        script: |
-          echo "Checking if the project directory exists..."
-          if [ -d "/root/xinchao" ]; then
-            echo "Directory exists. Pulling latest changes..."
-            cd /root/xinchao
-            if [ -d ".git" ]; then
-              git pull origin main
-            else
-              echo "Not a git repository. Cloning again..."
-              rm -rf /root/xinchao
-              git clone https://github.com/selcoool/test_ci_cd /root/xinchao
-            fi
-          else
-            echo "Directory does not exist. Creating and cloning..."
-            mkdir -p /root/xinchao
-            git clone https://github.com/selcoool/test_ci_cd /root/xinchao
-          fi
-          echo "Directory and repository setup complete."
+    - name: Display GitHub Username
+      run: echo "Current GitHub username is: ${{ github.actor }}"
+ 
+
+
+
+
+
+
+
+
+
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
+
+#     - name: SSH to VPS and update project
+#       uses: appleboy/ssh-action@master
+#       with:
+#         host: ${{ secrets.VPS_IP }}
+#         username: ${{ secrets.VPS_USERNAME }}
+#         password: ${{ secrets.VPS_PASSWORD }}
+#         script: |
+#           echo "Checking if the project directory exists..."
+#           if [ -d "/root/xinchao" ]; then
+#             echo "Directory exists. Pulling latest changes..."
+#             cd /root/xinchao
+#             if [ -d ".git" ]; then
+#               git pull origin main
+#             else
+#               echo "Not a git repository. Cloning again..."
+#               rm -rf /root/xinchao
+#               git clone https://github.com/selcoool/test_ci_cd /root/xinchao
+#             fi
+#           else
+#             echo "Directory does not exist. Creating and cloning..."
+#             mkdir -p /root/xinchao
+#             git clone https://github.com/selcoool/test_ci_cd /root/xinchao
+#           fi
+#           echo "Directory and repository setup complete."
 
 
 
