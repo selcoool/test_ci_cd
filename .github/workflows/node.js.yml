@@ -15,12 +15,11 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Display GitHub Username
-      run: echo : ${{ github.repository }} 
+      run: echo "Repository: ${{ github.repository }}"
 
     - name: Display actor Name
-      run: echo eeee :  ${{ github.actor }}
-    # - name: Display Repository Name
-    #   run: echo "Current repository name is: ${{ github.repository }}"
+      run: echo "Actor: ${{ github.actor }}"
+
 
 
 
