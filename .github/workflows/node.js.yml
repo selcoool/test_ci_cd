@@ -31,7 +31,22 @@ jobs:
         password: ${{ secrets.VPS_PASSWORD }}  # Sử dụng nếu bạn dùng mật khẩu cho SSH
         # key: ${{ secrets.VPS_SSH_KEY }}  # Sử dụng nếu bạn dùng khóa SSH
         script: |
-          echo "This is a new file" > /root/newfile.yml
+          echo "services:
+  react-app:
+    build:
+      context: ./react260724
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+  node-app:
+    build:
+      context: ./node260724
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+" > /root/newfile.yml
 
 
 
