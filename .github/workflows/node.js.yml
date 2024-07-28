@@ -27,15 +27,15 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -t trmthanh220895/test_ci_cd:latest .
-        docker push trmthanh220895/test_ci_cd:latest
+        docker build -t trmthanh220895/test_ci_cd1:latest .
+        docker push trmthanh220895/test_ci_cd1:latest
 
     - name: Update DockerHub image metadata
       env:
         DOCKERHUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
         DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-        IMAGE_NAME: test_ci_cd
-        REPO_NAME: trmthanh220895/test_ci_cd
+        IMAGE_NAME: test_ci_cd1
+        REPO_NAME: trmthanh220895/test_ci_cd1
       run: |
         TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "${DOCKERHUB_USERNAME}", "password": "${DOCKERHUB_PASSWORD}"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
         curl -s -H "Authorization: JWT ${TOKEN}" -H "Content-Type: application/json" -X PATCH -d '{"full_description": "This is the description of the image.", "category": "Category"}' https://hub.docker.com/v2/repositories/${REPO_NAME}/
