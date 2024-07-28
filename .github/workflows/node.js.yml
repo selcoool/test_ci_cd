@@ -1,11 +1,10 @@
-name: Deploy to VPS1
+name: Deploy to VPS
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
 
 jobs:
   deploy:
@@ -23,13 +22,19 @@ jobs:
         password: ${{ secrets.VPS_PASSWORD }}  # Sử dụng dòng này nếu bạn sử dụng mật khẩu để xác thực SSH
         # key: ${{ secrets.VPS_SSH_KEY }}  # Bỏ chú thích dòng này nếu bạn sử dụng khóa SSH để xác thực
         script: |
-          if [ -d "/${{ secrets.VPS_USERNAME }}" ]; then
-            cd /${{ secrets.VPS_USERNAME }}
-            git pull origin main
+          if [ -d "/home/${{ secrets.VPS_USERNAME }}/projects" ]; then
+            cd /home/${{ secrets.VPS_USERNAME }}/projects
+            if [ -d ".git" ]; then
+              git pull origin main
+            else
+              git clone https://github.com/selcoool/test_ci_cd .  # Clone vào thư mục hiện tại
+            fi
           else
-            git clone https://github.com/selcoool/test_ci_cd /${{ secrets.VPS_USERNAME }}
-            cd /${{ secrets.VPS_USERNAME }}
+            mkdir -p /home/${{ secrets.VPS_USERNAME }}/projects
+            cd /home/${{ secrets.VPS_USERNAME }}/projects
+            git clone https://github.com/selcoool/test_ci_cd .  # Clone vào thư mục hiện tại
           fi
+
 
 
 
