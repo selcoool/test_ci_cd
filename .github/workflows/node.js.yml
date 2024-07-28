@@ -7,38 +7,65 @@ on:
     branches: [ "main" ]
 
 
-
 jobs:
-  build-and-push:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
-
-    - name: Login to DockerHub
-      uses: docker/login-action@v1
+    - name: SSH to VPS and update project
+      uses: appleboy/ssh-action@master
       with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+        host: ${{ secrets.VPS_IP }}
+        username: ${{ secrets.VPS_USERNAME }}
+        password: ${{ secrets.VPS_PASSWORD }}  # Sử dụng dòng này nếu bạn sử dụng mật khẩu để xác thực SSH
+        # key: ${{ secrets.VPS_SSH_KEY }}  # Bỏ chú thích dòng này nếu bạn sử dụng khóa SSH để xác thực
+        script: |
+          if [ -d "/${{ secrets.VPS_USERNAME }}" ]; then
+            cd /${{ secrets.VPS_USERNAME }}
+            git pull origin main
+          else
+            git clone https://github.com/selcoool/test_ci_cd /${{ secrets.VPS_USERNAME }}
+            cd /${{ secrets.VPS_USERNAME }}
+          fi
 
-    - name: Build and push Docker image
-      run: |
-        docker build -t trmthanh220895/test_ci_cd1:latest .
-        docker push trmthanh220895/test_ci_cd1:latest
 
-    - name: Update DockerHub image metadata
-      env:
-        DOCKERHUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-        DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-        IMAGE_NAME: test_ci_cd1
-        REPO_NAME: trmthanh220895/test_ci_cd1
-      run: |
-        TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "${DOCKERHUB_USERNAME}", "password": "${DOCKERHUB_PASSWORD}"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
-        curl -s -H "Authorization: JWT ${TOKEN}" -H "Content-Type: application/json" -X PATCH -d '{"full_description": "This is the description of the image.", "category": "Category"}' https://hub.docker.com/v2/repositories/${REPO_NAME}/
+
+
+
+# jobs:
+#   build-and-push:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
+
+#     - name: Set up Docker Buildx
+#       uses: docker/setup-buildx-action@v1
+
+#     - name: Login to DockerHub
+#       uses: docker/login-action@v1
+#       with:
+#         username: ${{ secrets.DOCKER_HUB_USERNAME }}
+#         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+#     - name: Build and push Docker image
+#       run: |
+#         docker build -t trmthanh220895/test_ci_cd1:latest .
+#         docker push trmthanh220895/test_ci_cd1:latest
+
+#     - name: Update DockerHub image metadata
+#       env:
+#         DOCKERHUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+#         DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+#         IMAGE_NAME: test_ci_cd1
+#         REPO_NAME: trmthanh220895/test_ci_cd1
+#       run: |
+#         TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "${DOCKERHUB_USERNAME}", "password": "${DOCKERHUB_PASSWORD}"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
+#         curl -s -H "Authorization: JWT ${TOKEN}" -H "Content-Type: application/json" -X PATCH -d '{"full_description": "This is the description of the image.", "category": "Category"}' https://hub.docker.com/v2/repositories/${REPO_NAME}/
 
 
 
