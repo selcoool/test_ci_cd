@@ -17,6 +17,7 @@ jobs:
     - name: Display GitHub Username
       run: echo  ${{ github.repository }} 
 
+    - name: Display actor Name
       run: echo  ${{ github.actor }}
     # - name: Display Repository Name
     #   run: echo "Current repository name is: ${{ github.repository }}"
