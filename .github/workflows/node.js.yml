@@ -23,7 +23,7 @@ jobs:
     - name: Display actor Name
       run: echo "Actor:" ${{ github.actor }}
 
-    - name: SSH to VPS and add file to root
+       - name: SSH to VPS and add file to root
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.VPS_IP }}
@@ -36,17 +36,20 @@ jobs:
     build:
       context: ./react260724
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=production
   node-app:
     build:
       context: ./node260724
     ports:
-      - "5000:5000"
+      - '5000:5000'
     environment:
       - NODE_ENV=production
 " > /root/newfile.yml
+
+
+
 
 
 
