@@ -27,8 +27,8 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -t your-dockerhub-username/your-repo-name:latest .
-        docker push your-dockerhub-username/your-repo-name:latest
+        docker build -t trmthanh220895/test_ci_cd:latest .
+        docker push trmthanh220895/test_ci_cd:latest
 
 
 
